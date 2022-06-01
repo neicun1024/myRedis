@@ -33,10 +33,47 @@ NoSQL只是一种概念，泛指非关系型数据库，和关系型数据库做
 
 ## 2.1  安装Redis
 
-采用Docker安装，准备一个YAML文件：
+1. 采用Docker安装，准备一个YAML文件：
 ```yml
-version: '3.1'
+version: '3'
 services:
     redis: 
-        image:
+        image: daocloud.io/library/redis:5.0.7
+        restart: always
+        container_name: redis
+        environment: 
+            - TZ=Asia/Shanghai
+        ports:
+            - 6379:6379
 ```
+2. 创建`docker-compose.yml`文件，并写入上面的配置
+3. 执行`docker-compose up -d`，如果出现错误：`docker: Error response from daemon: Ports are not available: listen tcp 0.0.0.0:4449: bind: An attempt was made to access a socket in a way forbidden by its access permissions.`就在命令行输入`netcfg -d`并重启电脑
+4. 执行`docker ps`查看当前启动的docker容器
+
+### 2.2 连接Redis
+
+1. 执行`docker exec -it 99 bash`来进入容器，其中`99`表示该容器的标志符，就是`CONTAINER ID`的前两位
+2. 使用`redis-cli`连接Redis
+3. 可以简单输入两条命令`set name zhangsan`和`get name`，可以看到`'zhangsan'`被存入了Redis数据库
+4. 使用图形化界面连接Redis，从[GitHub](https://github.com/lework/RedisDesktopManager-Windows/releases)下载并安装，连接到Redis服务器，可以看到db0中有`'zhangsan'`
+
+
+# 三. Redis常用命令
+
+## 3.1 Redis存储数据的结构
+
+常用的5种数据结构
+- key-string：一个key对应一个值，是最常用的，一般用于存储一个值
+- key-hash：一个key对应一个map，存储一个对象数据的
+- key-list：一个key对应一个列表，使用list结构实现栈和队列结构
+- key-set：一个key对应一个集合，提供交集、差集和并集的操作
+- key-zset：一个key对应一个有序的集合，适合排行榜，积分存储等操作
+
+![20220601161158](https://raw.githubusercontent.com/neicun1024/PicBed/main/images_for_markdown/20220601161158.png)
+
+另外三种数据结构
+- HyperLogLog：用于计算近似值
+- GEO：用于存储地理位置，即经纬度
+- BIT：一般存储的也是一个字符串，存储的是一个byte[]
+
+## 3.2 key-string常用命令
