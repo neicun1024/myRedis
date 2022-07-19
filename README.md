@@ -4,7 +4,7 @@
 
 >1. 由于用户量增大，请求数量也随之增大，数据压力过大
 >2. 多台服务器之间，数据不同步
->3. 多态服务器之间的锁，不存在互斥性
+>3. 多太服务器之间的锁，不存在互斥性
 
 ![20220530204310](https://raw.githubusercontent.com/neicun1024/PicBed/main/images_for_markdown/20220530204310.png)
 
